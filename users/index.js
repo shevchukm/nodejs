@@ -3,9 +3,9 @@ const AuthController = require('../auth/AuthController')
 
 module.exports = (app) => {
 
-    app.get('/users', UsersController.getAll);
+    app.get('/users', UsersController.getAllUsers);
 
-    app.post('/users', UsersController.create);
+    app.post('/users', UsersController.createUser);
 
-    app.delete('/users', AuthController.loggedIn, UsersController.delete);
+    app.delete('/users', AuthController.loggedIn, UsersController.deleteUser);
 };

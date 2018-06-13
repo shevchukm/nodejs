@@ -1,24 +1,31 @@
-var good = require('./GoodsModel');
+var GoodsModel = require('./GoodsModel');
 
-exports.getAll = function(req, res) {
-    res.send(good.getAll());
+class GoodsController {
+    getAllGoods(req, res) {
+        GoodsModel.getAllGoods((err, docs) => {
+            err ? res.status(500).send('something went wrong on loading goods') : res.send(docs)
+        });
+    };
+
+    getOneGood(req, res) {
+        GoodsModel.getOneGood(req.params.id, (err, docs) => {
+            err ? res.status(500).send('something went wrong on loading this good') : res.send(docs)
+        });
+    };
+
+    createGood(req, res) {
+        GoodsModel.createGood(req.body, err => {
+            err ? res.status(500).send('server have got problems with add good') : res.status(200)
+                .send('successfully added');
+        });
+    };
+
+    deleteGood(req, res) {
+        GoodsModel.deleteGood(req.body.id, err => {
+            err ? res.status(500).send('server have got problems with delete good') : res.status(200)
+                .send('successfully deleted');
+        });
+    };
 };
 
-exports.getOne = function(req, res) {
-    res.send(good.one(req.params.name));
-};
-
-exports.create = function(req, res) {
-    good.create(req.body);
-    res.sendStatus(200);
-};
-
-exports.delete = function(req, res) {
-    good.delete(req.body.name);
-    res.sendStatus(200);
-};
-
-exports.upDate = function(req, res) {
-    good.upDate(req.body.name, reg.body);
-    res.send(good.all());
-};
+module.exports = new GoodsController();

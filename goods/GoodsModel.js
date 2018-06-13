@@ -1,29 +1,17 @@
-var goods = require('../storage/Goods.json');
+const db = require('../db')
 
-exports.getAll = function() {
-    return goods;
-};
+const getAllGoods = (callback) => db.get().collection('goods').find().toArray(callback); 
 
-exports.getOne = function(name) {
-    return (goods.find(function(good) {
-        return good.name === name;
-    }));
-};
+const getOneGood = (_id, callback) => db.get().collection('goods').findOne({_id}, callback);
 
-exports.create = function(body) {
-    goods.push(body);
-};
+const createGood = (good, callback) => db.get().collection('goods').insertOne(good, callback);
 
-exports.delete = function(name) {
-    goods = goods.filter(function(good) {
-        return good.name !== name;
-    });
-};
+const deleteGood = (id, callback) => db.get().collection('goods')
+    .deleteOne({ _id: db.ObjectId(id) }, callback);
 
-exports.upDate = function(name, obj) {
-    var good = goods.find(function(good) {
-        good.name = name;
-    });
-
-    good = obj;
-};
+module.exports = {
+    getAllGoods,
+    getOneGood,
+    createGood,
+    deleteGood
+}

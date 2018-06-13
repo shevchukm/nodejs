@@ -1,30 +1,17 @@
-var users = require('../storage/Users.json');
+var db = require('../db');
 
-exports.getAll = function() {
-    return users;
-};
+const getAllUsers = (callback) => db.get().collection('users').find().toArray(callback); 
 
-exports.getOne = function(email) {
-    return (users.find(function(user) {
-        return user.email === email;
-    }));
-};
+const getOneUser = (email, callback) => db.get().collection('users').findOne({email}, callback);
 
-exports.create = function(body) {
-    body.id = users.length ? users[users.length-1].id + 1 : 1;
-    users.push(body);
-};
+const createUser = (user, callback) => db.get().collection('users').insertOne(user, callback);
 
-exports.delete = function(id) {
-    users = users.filter(function(user) {
-        return user.id !== id;
-    });
-};
+const deleteUser = (id, callback) => db.get().collection('users')
+    .deleteOne({ _id: db.ObjectId(id) }, callback);
 
-exports.upDate = function(email, obj) {
-    var user = users.find(function(good) {
-        user.email === email;
-    });
-
-    user = obj;
+module.exports = {
+    getAllUsers,
+    getOneUser,
+    createUser,
+    deleteUser
 };

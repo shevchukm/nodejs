@@ -1,12 +1,13 @@
 const GoodsController = require('./GoodsController');
-const AuthController = require('../auth/AuthController')
+const AuthController = require('../auth/AuthController');
+
 module.exports = (app) => {
 
-    app.get('/goods', GoodsController.getAll);
+    app.get('/goods', GoodsController.getAllGoods);
 
-    app.get('/goods/:name', GoodsController.getOne);
+    app.get('/goods/:name', GoodsController.getOneGood);
 
-    app.post('/goods', GoodsController.create);
+    app.post('/goods', GoodsController.createGood);
 
-    app.delete('/goods', AuthController.loggedIn, GoodsController.delete);
+    app.delete('/goods', AuthController.loggedIn, GoodsController.deleteGood);
 }

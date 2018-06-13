@@ -1,19 +1,30 @@
 var UsersModel = require('./UsersModel');
 
-exports.getAll = function(res, req) {
-    req.send(UsersModel.getAll());
+class UserController {
+
+    getAllUsers(req, res) {
+        UsersModel.getAllUsers((err, docs) => {
+            err ? res.status(500).send('something went wrong on loading users') : res.send(docs)
+        });
+    };
+
+    getOneUser(req, res) {
+        UsersModel.getOneUser(req.params.email, (err, docs) => {
+            err ? res.status(500).send('something went wrong on loading this user') : res.send(docs)
+        });
+    };
+
+    createUser(req, res) {
+        UsersModel.createUser(req.body, err => {
+            err ? res.status(500).send('server have got problems with add user') : res.status(200).send('successfully created');
+        });
+    };
+
+    deleteUser(req, res) {
+        UsersModel.deleteUser(req.body.id, err => {
+            err ? res.status(500).send('server have got problems with delete user') : res.status(200).send('successfully deleted');
+        });
+    };
 };
 
-exports.getOne = function(req, res) {
-    return res.send(UsersModel.getOne(req.data.email));
-};
-
-exports.create = function(req, res) {
-    UsersModel.create(req.body);
-    res.sendStatus(200);
-};
-
-exports.delete = function(req, res) {
-    UsersModel.delete(req.body.id);
-    res.sendStatus(200);
-};
+module.exports = new UserController();
