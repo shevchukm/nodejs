@@ -1,29 +1,36 @@
-var GoodsModel = require('./GoodsModel');
+const GoodsModel = require('./GoodsModel');
 
 class GoodsController {
+    responseHandler(err, res, message, docs) {
+        err ? res.status(500).send(message[0])
+            : docs ? res.send(docs) : res.status(200).send(message[1])
+    };
+
     getAllGoods(req, res) {
         GoodsModel.getAllGoods((err, docs) => {
-            err ? res.status(500).send('something went wrong on loading goods') : res.send(docs)
+            const message = ['something went wrong on loading goods'];
+            this.responseHandler(err, res, message, docs)
         });
     };
 
     getOneGood(req, res) {
         GoodsModel.getOneGood(req.params.id, (err, docs) => {
-            err ? res.status(500).send('something went wrong on loading this good') : res.send(docs)
+            const message = ['something went wrong on loading this good'];
+            this.responseHandler(err, res, message, docs);
         });
     };
 
     createGood(req, res) {
         GoodsModel.createGood(req.body, err => {
-            err ? res.status(500).send('server have got problems with add good') : res.status(200)
-                .send('successfully added');
+            const message = ['server have got problems with add good', 'successfully added']
+            this.responseHandler(err, res, message)
         });
     };
 
     deleteGood(req, res) {
         GoodsModel.deleteGood(req.body.id, err => {
-            err ? res.status(500).send('server have got problems with delete good') : res.status(200)
-                .send('successfully deleted');
+            const message = ['server have got problems with delete good', 'successfully deleted']
+            this.responseHandler(err, res, message)
         });
     };
 };

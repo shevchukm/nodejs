@@ -1,4 +1,4 @@
-var db = require('../db');
+const db = require('../db');
 
 const getAllUsers = callback => db.get().collection('users').find()
     .project({password: false}).toArray(callback); 

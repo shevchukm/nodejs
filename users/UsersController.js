@@ -1,48 +1,84 @@
-var UsersModel = require('./UsersModel');
-const confirm = require('../nodemailer');
+const UsersModel = require('./UsersModel');
+const mailClient = require('../mailClient/mailClient');
+
+const confirmMail = new mailClient();
+
+confirmMail.configMailServise(
+    'gmail', {
+     user: 'testnodemisha@gmail.com',
+     pass: 'Aa369852'
+    }
+);
+
+
+
+confirmMail.generateMailBody('testnodemisha@gmail.com', 'Sending Email for confirmation account');
+
 class UserController {
+
+    responseHandler(err, res, message, users) {
+        err ? res.status(500).send(message[0])
+            : users ? res.send(users) : res.status(200).send(message[1])
+    };
 
     getAllUsers(req, res) {
         UsersModel.getAllUsers((err, users) => {
-            err ? res.status(500).send('something went wrong on loading users') : res.send(users)
+            const message = ['error on loading users'];
+
+            this.responseHandler(err, res, message, users);
         });
     };
 
     getOneUser(req, res) {
         UsersModel.getOneUser(req.params.email, (err, users) => {
-            err ? res.status(500).send('something went wrong on loading this user') : res.send(users)
+            const message = ['something went wrong on loading this user'];
+
+            this.responseHandler(err, res, message, users);
         });
     };
 
     createUser(req, res) {
+        const path = 'http://localhost:3012/confirm';
+
         req.body.confirm = false
         UsersModel.createUser(req.body, (err, user) => {
-            err ? res.status(500).send('server have got problems with add user') : confirm.confirm(req.body.email, user.ops[0]._id);
-            err ? res.status(500).send('server have got problems with add user') : res.status(200).send('successfully created');
+            const message = ['server have got problems with add user', 'successfully created'];
+
+            err ? res.status(500).send('server have got problems with add user') : confirmMail.sendMail(req.body.email, (path + user.ops[0]._id))
+                .then(res => console.log(res)).catch(err => console.log(err));
+            this.responseHandler(err, res, message);
         });
     };
 
     deleteUser(req, res) {
         UsersModel.deleteUser(req.body.id, err => {
-            err ? res.status(500).send('server have got problems with delete user') : res.status(200).send('successfully deleted');
+            const message = ['server have got problems with delete user', 'successfully deleted'];
+
+            this.responseHandler(err, res, message);
         });
     };
 
     confirmUserEmail(req, res) {
-        UsersModel.confirmUser(req.params.id, (err) => {
-            err ? res.status(500).send('some problems with server on confirm') : res.status(200).send('succsesfully confirmed')
+        UsersModel.confirmUser(req.params.id, err => {
+            const message = ['some problems with server on confirm', 'succsesfully confirmed'];
+
+            this.responseHandler(err, res, message);
         });
     };
 
     addGoodsToUser(req, res) {
         UsersModel.addGoodsToUser(req.body, (err) => {
-            err ? res.status(500).send('some problems with server on setting goods') : res.status(200).send('succsesfully updated')
+            const message = ['some problems with server on setting goods', 'succsesfully updated'];
+
+            this.responseHandler(err, res, message);
         });
     };
 
     getUserGoods(req, res) {
         UsersModel.getUserGoods(req.body._id, (err, user) => {
-            err ? res.status(500).send('something went wrong on getting users goods' ) : res.send(user.goods)
+            const message = ['some problems with server on setting goods'];
+
+            this.responseHandler(err, res, message, user);
         });
     };
 };

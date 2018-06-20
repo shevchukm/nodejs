@@ -8,7 +8,7 @@ var UsersModule = require('./users');
 var AuthModule = require('./Auth');
 var db = require('./db')
 
-var app = express();
+const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
