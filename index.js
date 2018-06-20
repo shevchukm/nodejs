@@ -14,6 +14,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
+
+
 GoodsModule(app);
 UsersModule(app);
 AuthModule(app);

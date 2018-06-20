@@ -1,6 +1,6 @@
 const db = require('../db')
 
-const getAllGoods = (callback) => db.get().collection('goods').find().toArray(callback); 
+const getAllGoods = callback => db.get().collection('goods').find().toArray(callback); 
 
 const getOneGood = (_id, callback) => db.get().collection('goods').findOne({_id}, callback);
 
