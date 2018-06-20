@@ -1,9 +1,10 @@
 const GoodsModel = require('./GoodsModel');
 
 class GoodsController {
-    responseHandler(err, res, message, docs) {
-        err ? res.status(500).send(message[0])
-            : docs ? res.send(docs) : res.status(200).send(message[1])
+    responseHandler(err, res, messages, docs) {
+        const [errorMessage, succsesMessage] = messages;
+        err ? res.status(500).send(errorMessage)
+            : docs ? res.send(docs) : res.status(200).send(succsesMessage)
     };
 
     getAllGoods(req, res) {
