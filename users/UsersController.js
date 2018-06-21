@@ -10,16 +10,11 @@ const credentials = {
 };
 const confirmMail = new mailClient(credentials);
 
-const mailBody = {
-    from: 'testnodemisha@gmail.com',
-    subject: 'Sending Email for confirmation account'
-}
-
 class UserController {
 
     responseHandler(err, res, message, users) {
         const [errorMessage, succsesMessage] = message;
-        
+
         err ? res.status(500).send(errorMessage)
             : users ? res.send(users) : res.status(200).send(succsesMessage)
     };
@@ -43,15 +38,18 @@ class UserController {
     createUser(req, res) {
         req.body.confirm = false;
         req.body.goods = [];
-
+        
         UsersModel.createUser(req.body, (err, user) => {
-            mailBody.to = req.body.email;
-            mailBody.text = process.env.confirmPath + user.ops[0]._id;
+
+            const mailBody = {
+                to: req.body.email,
+                text: process.env.confirmPath + user.ops[0]._id
+            }
 
             const message = ['server have got problems with add user', 'successfully created'];
 
             err ? res.status(500).send('server have got problems with add user') : confirmMail.sendMail(mailBody)
-                .then(response => res.send(`confirmation has sent to ${response.envelope.accepted}`))
+                .then(response => console.log('confirmation has been sent: ', response.envelope))
                 .catch(err => console.log(err));
             this.responseHandler(err, res, message);
         });
@@ -75,7 +73,6 @@ class UserController {
 
     addGoodsToUser(req, res) {
         UsersModel.addGoodsToUser(req.body, (err) => {
-            console.log(req.body)
             const message = ['some problems with server on setting goods', 'succsesfully updated'];
 
             this.responseHandler(err, res, message);
