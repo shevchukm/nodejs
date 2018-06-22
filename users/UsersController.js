@@ -83,7 +83,7 @@ class UserController {
         UsersModel.getUserGoods(req.body._id, (err, user) => {
             const message = ['some problems with server on setting goods'];
 
-            this.responseHandler(err, res, message, user);
+            this.responseHandler(err, res, message, user.goods);
         });
     };
 };

@@ -3,7 +3,7 @@ const db = require('../db');
 class UserModel {
     getAllUsers(callback) {
         db.get().collection('users').find()
-            .project({password: false}).toArray(callback);
+            .project({password: false, goods: false}).toArray(callback);
     }
 
     getOneUser(email, callback) {

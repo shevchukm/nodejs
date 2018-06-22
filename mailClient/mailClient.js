@@ -10,7 +10,7 @@ class MailClient {
         this.transporter = nodemailer.createTransport(service);
     };
 
-    generateEmailBody({ from = process.env.MAIL_BODY_FROM, subject = process.env.MAIL_BODY_SUBJECT, to, text }) {
+    generateEmailBody( {from = process.env.MAIL_BODY_FROM, subject = process.env.MAIL_BODY_SUBJECT, to, text }) {
         this.emailBody = { from, subject, to, text }
     }
 
