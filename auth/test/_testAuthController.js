@@ -5,14 +5,24 @@ const AuthController = require('../AuthController')
 
 describe('AuthController', () => {
     const mockUsersModel = sinon.mock(UsersModel);
-    let req = {body: {}};
-    let res = {};
     const next = () => {};
+    let req, res;
+
+    beforeEach(() => {
+        req = { body: {} };
+     
+        res = {};
+    });
+
+    afterEach(() => {
+        req = { body: {} };
+     
+        res = {};
+    });
 
     describe('#authorization', () => {
-        req.headers = {token: ''};
-
         it('should send message "you are not logged in" with status 403', done => {
+            req.headers = {token: ''};
             res.status = status => {
                 expect(status).to.be.equal(403);
                 done();
@@ -26,7 +36,7 @@ describe('AuthController', () => {
         });
 
         it('should set _id to request body if token pass verify', done => {
-            req.headers.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjViMjdiYzNiNDk4ZDkzMzk1ZjNiYWFjZiIsIm5hbWUiOiJNeWtoYWlsbyBTaGV2Y2h1ayIsImVtYWlsIjoibW1pa3JvYkBnbWFpbC5jb20iLCJwYXNzd29yZCI6IjM2OTg1MiIsImNvbmZpcm0iOnRydWUsImdvb2RzIjpbeyJfaWQiOiI1YjJhNWQ1Mjc3ZTY2YzI1NjE2ZTk1ZGEiLCJjYXRlZ29yeSI6ImNhcnMiLCJwcmljZSI6IjgwMCIsInN0b2NrZWQiOnRydWUsIm5hbWUiOiJwb3JzaGUifV19LCJpYXQiOjE1Mjk5MzM1NTB9.JnDxQRdhRyob6QUjIEmr-qPtiLDkru44e9PnUmQjrus'
+            req.headers = {token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjViMjdiYzNiNDk4ZDkzMzk1ZjNiYWFjZiIsIm5hbWUiOiJNeWtoYWlsbyBTaGV2Y2h1ayIsImVtYWlsIjoibW1pa3JvYkBnbWFpbC5jb20iLCJwYXNzd29yZCI6IjM2OTg1MiIsImNvbmZpcm0iOnRydWUsImdvb2RzIjpbeyJfaWQiOiI1YjJhNWQ1Mjc3ZTY2YzI1NjE2ZTk1ZGEiLCJjYXRlZ29yeSI6ImNhcnMiLCJwcmljZSI6IjgwMCIsInN0b2NrZWQiOnRydWUsIm5hbWUiOiJwb3JzaGUifV19LCJpYXQiOjE1Mjk5MzM1NTB9.JnDxQRdhRyob6QUjIEmr-qPtiLDkru44e9PnUmQjrus'};
             AuthController.authorization(req, res, next);
             expect(req.body._id).to.equal('5b27bc3b498d93395f3baacf');
             done();
