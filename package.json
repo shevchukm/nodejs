@@ -4,7 +4,8 @@
   "description": "",
   "main": "myfirst.js",
   "scripts": {
-    "test": "mocha"
+    "start": "node index.js",
+    "test": "mocha */test/*.js"
   },
   "author": "",
   "license": "ISC",

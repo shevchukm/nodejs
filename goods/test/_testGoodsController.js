@@ -9,11 +9,7 @@ describe("GoodsController", function() {
         params: {id: 1},
         body: {id: 1}
     };
-    let res = {
-        data: {},
-        status: function(data){this.data.status = data; return this},
-        send: function(data){this.data.send = data}
-    };
+    let res = {};
 
     describe("#getAllGoods", ()=>{
         it("should send all goods", done => {
